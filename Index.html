@@ -1,13 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>রিমোট ইনকাম ব্লুপ্রিন্ট (সংস্করণ ৪.০) — Army IBA Specialist (AIS)</title>
+<title>রিমোট ইনকাম ব্লুপ্রিন্ট (মাস্টার এডিশন) — Army IBA Specialist (AIS)</title>
+
+<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<!-- Lucide Icons -->
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
@@ -16,1093 +18,805 @@
     --primary-dark: #0369a1;
     --accent: #10b981;
     --accent-dark: #047857;
-    --warning: #f59e0b;
     --danger: #ef4444;
     --bg-surface: #ffffff;
+    --bg-alt: #f8fafc;
     --text-main: #0f172a;
     --text-muted: #475569;
     --border: #e2e8f0;
     --code-bg: #0b1329;
     --ais-gold: #fbbf24;
-    --ais-gold-dark: #d97706;
+    --ais-cyan: #38bdf8;
+    --ais-navy: #0b132b;
     --notebook-purple: #8b5cf6;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
   body {
     font-family: 'Hind Siliguri', 'Plus Jakarta Sans', sans-serif;
-    background-color: #f1f5f9;
+    background-color: #cbd5e1;
     color: var(--text-main);
-    line-height: 1.68;
-    font-size: 14px;
-    padding: 20px 10px;
+    line-height: 1.65;
+    font-size: 14.5px;
   }
 
-  .ebook-container {
-    max-width: 900px;
-    margin: 0 auto;
+  /* Main Container */
+  #app-wrapper {
+    max-width: 960px;
+    margin: 20px auto;
     background: var(--bg-surface);
-    border-radius: 14px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
     overflow: hidden;
-    border: 1px solid var(--border);
+    position: relative;
   }
 
-  /* AIS Header Bar */
+  @media (max-width: 980px) { #app-wrapper { margin: 0; border-radius: 0; } }
+
+  /* Brand Header */
   .brand-bar {
-    background: #040914;
-    padding: 14px 28px;
+    background: var(--ais-navy);
+    padding: 14px 35px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 2px solid var(--primary-dark);
+    position: sticky;
+    top: 0;
+    z-index: 50;
   }
 
-  .brand-logo-wrap {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-  }
+  .brand-logo-wrap { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .logo-svg { width: 44px; height: 44px; }
+  .ais-svg-stroke { fill: none; stroke: var(--ais-cyan); stroke-width: 4; }
+  
+  .brand-text-name { font-size: 15px; font-weight: 800; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.5px; }
+  .brand-text-sub { font-size: 10px; color: var(--ais-cyan); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; display: block; margin-top: -2px; }
 
-  /* Official AIS SVG Crest */
-  .brand-crest-svg {
-    width: 38px;
-    height: 38px;
-    flex-shrink: 0;
+  .btn-header {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(56, 189, 248, 0.15); border: 1px solid var(--ais-cyan);
+    color: var(--ais-cyan); padding: 8px 18px; border-radius: 6px;
+    font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s;
   }
+  .btn-header:hover { background: var(--ais-cyan); color: var(--ais-navy); }
 
-  .brand-text-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: #f8fafc;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    letter-spacing: 0.3px;
-  }
-
-  .brand-text-sub {
-    font-size: 10.5px;
-    color: var(--ais-gold);
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    font-weight: 600;
-    display: block;
-  }
-
-  .badge-verified-ais {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(16, 185, 129, 0.15);
-    border: 1px solid rgba(16, 185, 129, 0.35);
-    color: #34d399;
-    padding: 4px 12px;
-    border-radius: 9999px;
-    font-size: 11.5px;
-    font-weight: 700;
-  }
-
-  /* Cover Styling */
-  .cover {
+  /* Hero Section */
+  .hero {
     background: linear-gradient(145deg, #050b18 0%, #0c203d 55%, #051327 100%);
-    color: #ffffff;
-    padding: 55px 36px 45px;
-    text-align: center;
-    border-bottom: 5px solid var(--primary);
+    color: #ffffff; padding: 65px 45px 55px; text-align: center; border-bottom: 5px solid var(--primary);
   }
-
   .cover-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(2, 132, 199, 0.22);
-    border: 1px solid rgba(56, 189, 248, 0.45);
-    color: #38bdf8;
-    padding: 5px 16px;
-    border-radius: 9999px;
-    font-size: 12px;
-    font-weight: 700;
-    margin-bottom: 18px;
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(2, 132, 199, 0.25); border: 1px solid rgba(56, 189, 248, 0.4);
+    color: var(--ais-cyan); padding: 6px 18px; border-radius: 9999px;
+    font-size: 12px; font-weight: 700; margin-bottom: 20px; letter-spacing: 0.5px;
   }
+  .hero h1 { font-size: 34px; font-weight: 800; line-height: 1.35; margin-bottom: 12px; color: #f8fafc; }
+  .hero p { font-size: 15.5px; color: #94a3b8; max-width: 740px; margin: 0 auto 26px; }
 
-  .cover h1 {
-    font-size: 30px;
-    font-weight: 700;
-    line-height: 1.35;
-    margin-bottom: 12px;
-    color: #f8fafc;
-  }
+  .hero-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; font-size: 12.5px; color: #cbd5e1; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 24px; }
+  .hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
 
-  .cover p {
-    font-size: 15px;
-    color: #94a3b8;
-    max-width: 720px;
-    margin: 0 auto 24px;
-  }
+  .content-pad { padding: 45px; }
+  @media (max-width: 768px) { .content-pad { padding: 25px 20px; } .hero { padding: 40px 20px; } .hero h1 { font-size: 26px; } .brand-bar { flex-direction: column; align-items: flex-start; gap: 14px; } .btn-header { width: 100%; justify-content: center; } }
 
-  .cover-meta {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 18px;
-    font-size: 12.5px;
-    color: #cbd5e1;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-    padding-top: 18px;
-  }
+  /* Typography & Structure */
+  .chapter-head { display: flex; align-items: center; gap: 12px; margin: 45px 0 18px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+  .chapter-head:first-of-type { margin-top: 0; }
+  .chapter-head i { color: var(--primary); width: 26px; height: 26px; flex-shrink: 0; }
+  .chapter-head h2 { font-size: 20px; font-weight: 800; color: #0f172a; }
 
-  .cover-meta span {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 18px 0; }
+  @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
 
-  .content { padding: 36px 40px; }
-
-  @media (max-width: 768px) {
-    .content { padding: 22px 16px; }
-    .cover { padding: 36px 18px; }
-    .cover h1 { font-size: 22px; }
-    .brand-bar { padding: 12px 16px; flex-direction: column; gap: 8px; align-items: flex-start; }
-  }
-
-  /* NotebookLM Live Hub */
-  .notebook-classroom-box {
-    background: linear-gradient(135deg, #0e122b 0%, #161a3f 100%);
-    border: 2px solid var(--notebook-purple);
-    border-radius: 12px;
-    padding: 22px;
-    color: #ffffff;
-    margin-bottom: 32px;
-    box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.25);
-  }
-
-  .notebook-header-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(139, 92, 246, 0.22);
-    border: 1px solid rgba(167, 139, 250, 0.45);
-    color: #c4b5fd;
-    padding: 3px 10px;
-    border-radius: 9999px;
-    font-size: 11px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-  }
-
-  .notebook-title {
-    font-size: 17.5px;
-    font-weight: 700;
-    color: #f8fafc;
-    margin-bottom: 8px;
-  }
-
-  .notebook-desc {
-    font-size: 13px;
-    color: #cbd5e1;
-    line-height: 1.65;
-    margin-bottom: 16px;
-  }
-
-  .notebook-feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .notebook-feature-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 12.5px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .btn-notebook-launch {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-    color: #ffffff;
-    padding: 11px 20px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: all 0.2s ease;
-  }
-
-  .btn-notebook-launch:hover {
-    background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
-  }
-
-  /* Interactive Simulator */
-  .decision-engine-card {
-    background: linear-gradient(135deg, #0b1528 0%, #102445 100%);
-    color: #ffffff;
-    border: 2px solid #0284c7;
-    border-radius: 12px;
-    padding: 22px;
-    margin-bottom: 32px;
-  }
-
-  .engine-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  }
-
-  .engine-header h3 {
-    font-size: 17px;
-    color: #38bdf8;
-    font-weight: 700;
-  }
-
-  .quiz-step { margin-bottom: 16px; }
-  .quiz-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #e2e8f0;
-    margin-bottom: 8px;
-    display: block;
-  }
-
-  .quiz-options {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 8px;
-  }
-
-  .quiz-opt {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 6px;
-    padding: 9px 12px;
-    font-size: 12.5px;
-    color: #f1f5f9;
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .quiz-opt:hover, .quiz-opt.active {
-    background: #0284c7;
-    border-color: #38bdf8;
-    color: #ffffff;
-    font-weight: 600;
-  }
-
-  .engine-result-panel {
-    background: rgba(15, 23, 42, 0.85);
-    border: 1px solid #38bdf8;
-    border-radius: 8px;
-    padding: 16px;
-    margin-top: 16px;
-    display: none;
-  }
-
-  .result-metric-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 10px;
-    margin: 12px 0;
-  }
-
-  .result-metric-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 6px;
-    padding: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .metric-label {
-    font-size: 10.5px;
-    color: #94a3b8;
-    text-transform: uppercase;
-    font-weight: 700;
-    display: block;
-    margin-bottom: 2px;
-  }
-
-  .metric-value {
-    font-size: 14px;
-    font-weight: 700;
-    color: #38bdf8;
-  }
-
-  /* Chapter Header */
-  .chapter-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 36px 0 16px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--border);
-  }
-
-  .chapter-header:first-of-type { margin-top: 0; }
-
-  .chapter-header i {
-    width: 22px;
-    height: 22px;
-    color: var(--primary);
-    flex-shrink: 0;
-  }
-
-  .chapter-header h2 {
-    font-size: 17.5px;
-    font-weight: 700;
-    color: #0f172a;
-  }
-
-  .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin: 16px 0;
-  }
-
-  @media (max-width: 768px) {
-    .grid-2 { grid-template-columns: 1fr; }
-  }
-
-  .card {
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px;
-  }
-
+  .card { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 8px; padding: 18px; }
   .card-danger { background: #fff5f5; border-color: #fecaca; }
   .card-success { background: #f0fdf4; border-color: #bbf7d0; }
-
-  .card-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 700;
-    font-size: 13.5px;
-    margin-bottom: 8px;
-  }
-
+  .card-warning { background: #fffbeb; border-color: #fde68a; }
+  .card-title { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px; margin-bottom: 8px; color: var(--text-main); }
   .card-danger .card-title { color: var(--danger); }
   .card-success .card-title { color: var(--accent-dark); }
+  .card-warning .card-title { color: #b45309; }
+  .card p, .card ul { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; }
 
-  .interactive-box {
-    background: var(--code-bg);
-    color: #f1f5f9;
-    border-radius: 8px;
-    padding: 16px 18px;
-    margin: 16px 0;
-    position: relative;
-    border: 1px solid #1e293b;
-  }
+  /* Data Table */
+  .tbl-wrap { overflow-x: auto; margin: 18px 0; border: 1px solid var(--border); border-radius: 8px; }
+  .data-tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 600px; }
+  .data-tbl th, .data-tbl td { padding: 14px 16px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+  .data-tbl th { background: #f1f5f9; font-weight: 800; color: var(--text-main); }
+  .data-tbl tr:last-child td { border-bottom: none; }
+  .data-tbl tr:nth-child(even) { background: #fafafa; }
 
-  .box-label {
-    position: absolute;
-    top: -10px;
-    right: 14px;
-    background: var(--primary);
-    color: #ffffff;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 4px;
-    text-transform: uppercase;
-  }
+  /* NotebookLM Hub */
+  .nb-card { background: linear-gradient(135deg, #0e122b 0%, #161a3f 100%); border: 2px solid var(--notebook-purple); border-radius: 12px; padding: 26px; color: #fff; margin-bottom: 35px; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15); }
+  .nb-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.4); color: #c4b5fd; padding: 4px 12px; border-radius: 9999px; font-size: 11px; font-weight: 800; margin-bottom: 14px; text-transform: uppercase; }
+  .nb-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
+  .nb-feat { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 6px; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+  .btn-nb { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: #fff; padding: 12px 22px; border-radius: 6px; font-size: 14px; font-weight: 800; text-decoration: none; transition: transform 0.2s; }
+  .btn-nb:hover { transform: translateY(-2px); }
 
-  .script-content {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    color: #cbd5e1;
-  }
+  /* Decision Engine */
+  .sim-card { background: linear-gradient(135deg, var(--ais-navy) 0%, #102445 100%); border: 2px solid var(--primary); border-radius: 12px; padding: 26px; color: #fff; margin-bottom: 35px; }
+  .sim-head { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 14px; }
+  .sim-head h3 { font-size: 18px; color: var(--ais-cyan); font-weight: 800; }
+  .sim-step { margin-bottom: 16px; }
+  .sim-label { font-size: 13.5px; font-weight: 700; color: #e2e8f0; margin-bottom: 8px; display: block; }
+  .sim-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+  .sim-opt { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); padding: 12px; border-radius: 8px; color: #f1f5f9; font-size: 13px; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+  .sim-opt:hover, .sim-opt.active { background: var(--primary); border-color: var(--ais-cyan); font-weight: 700; color: #fff; }
+  .sim-res { background: rgba(15,23,42,0.95); border: 1px solid var(--ais-cyan); padding: 20px; border-radius: 8px; margin-top: 20px; display: none; }
+  .res-metric { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); }
+  .metric-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 2px; }
+  .metric-value { font-size: 15px; font-weight: 800; color: var(--ais-cyan); }
 
-  .copy-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: #1e293b;
-    border: 1px solid #334155;
-    color: #38bdf8;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 11px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: all 0.2s ease;
-  }
+  /* Terminal Code Boxes */
+  .term-box { background: var(--code-bg); border: 1px solid var(--ais-navy); border-radius: 8px; padding: 22px; margin: 18px 0; position: relative; color: #cbd5e1; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.6; white-space: pre-wrap; }
+  .term-lbl { position: absolute; top: -12px; right: 16px; background: var(--primary-dark); color: #fff; font-size: 10.5px; font-weight: 800; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; font-family: 'Plus Jakarta Sans', sans-serif; }
+  .btn-copy { display: inline-flex; align-items: center; gap: 6px; background: #1e293b; border: 1px solid #334155; color: var(--ais-cyan); padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; margin-top: 14px; font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.2s; }
+  .btn-copy:hover { background: #334155; color: #fff; }
 
-  .copy-btn:hover { background: #334155; color: #ffffff; }
+  /* Exam Engine */
+  .exam-card { background: var(--bg-alt); border: 1px solid var(--border); padding: 26px; border-radius: 12px; margin: 40px 0; }
+  .exam-q { background: #fff; padding: 18px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px; }
+  .q-title { font-weight: 800; font-size: 14.5px; margin-bottom: 12px; }
+  .q-opt { display: block; padding: 12px 16px; background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 10px; cursor: pointer; font-size: 13.5px; transition: 0.2s; }
+  .q-opt:hover { background: #e0f2fe; border-color: #7dd3fc; }
+  .q-opt.selected { background: #bae6fd; border-color: #0284c7; font-weight: 700; color: #0369a1; }
+  .btn-submit { background: var(--primary); color: #fff; border: none; padding: 14px 24px; border-radius: 8px; font-weight: 800; font-size: 14.5px; cursor: pointer; width: 100%; margin-top: 12px; transition: 0.2s; }
+  .btn-submit:hover { background: var(--primary-dark); }
+  #exam-feedback { margin-top: 16px; font-weight: 800; font-size: 15px; text-align: center; }
 
-  .funnel-container {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin: 16px 0;
-  }
+  /* Certificate Template (Hidden by Default) */
+  #certificate-container { display: none; margin: 40px 0; padding: 50px; border: 12px double var(--ais-navy); border-radius: 12px; background: #fff; text-align: center; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+  .cert-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; opacity: 0.03; pointer-events: none; }
+  .cert-header { font-family: 'Cinzel', serif; font-size: 32px; font-weight: 800; color: var(--ais-navy); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .cert-sub { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 30px; }
+  .cert-name-line { font-family: 'Cinzel', serif; font-size: 36px; font-weight: 800; color: var(--primary-dark); border-bottom: 3px solid var(--ais-cyan); display: inline-block; padding: 0 45px 8px; margin: 20px 0; }
+  .cert-body { font-size: 15px; color: var(--text-muted); max-width: 650px; margin: 0 auto; line-height: 1.7; }
+  .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 50px; border-top: 1px solid var(--border); padding-top: 20px; text-align: left; }
+  .btn-action-outline { background: #fff; color: var(--ais-navy); border: 2px solid var(--ais-navy); padding: 12px 24px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; margin-top: 24px; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
+  .btn-action-outline:hover { background: var(--ais-navy); color: #fff; }
 
-  .funnel-stage {
-    display: flex;
-    align-items: center;
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 10px 14px;
-    justify-content: space-between;
-    font-size: 13px;
-  }
+  /* Invoice Generator & Checkout */
+  .checkout-hub { background: var(--ais-navy); color: #fff; border: 2px solid var(--ais-gold); border-radius: 12px; padding: 35px; margin: 45px 0 20px; }
+  .hub-title { display: flex; align-items: center; gap: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 24px; }
+  .pay-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .pay-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 14px; }
+  
+  .invoice-form { background: rgba(0,0,0,0.35); border: 1px solid var(--ais-cyan); border-radius: 10px; padding: 24px; margin-top: 24px; }
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 12.5px; font-weight: 700; color: #94a3b8; margin-bottom: 6px; }
+  .form-group input { width: 100%; padding: 12px; background: rgba(255,255,255,0.95); border: 1px solid #fff; border-radius: 6px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; outline: none; }
+  .form-group input:focus { border-color: var(--ais-cyan); }
+  .btn-generate-invoice { width: 100%; background: var(--ais-gold); color: var(--ais-navy); font-weight: 800; padding: 14px; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; margin-top: 14px; transition: 0.2s; }
+  .btn-generate-invoice:hover { background: #eab308; }
 
-  .funnel-rate {
-    background: #e0f2fe;
-    color: #0369a1;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 11.5px;
-    font-weight: 700;
-  }
+  /* Invoice Display (Hidden by default) */
+  #invoice-container { display: none; background: #fff; color: #0f172a; border: 1px solid var(--border); border-radius: 10px; padding: 40px; margin-top: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+  .inv-head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--ais-navy); padding-bottom: 20px; margin-bottom: 24px; }
+  .inv-title { font-family: 'Cinzel', serif; font-size: 26px; font-weight: 800; color: var(--ais-navy); }
+  .inv-details { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 24px; line-height: 1.6; }
+  .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 14px; }
+  .inv-table th, .inv-table td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; }
+  .inv-table th { background: #f1f5f9; font-weight: 800; }
+  .inv-total { text-align: right; font-size: 20px; font-weight: 800; color: var(--primary-dark); }
+  .inv-actions { display: flex; gap: 12px; margin-top: 24px; }
 
-  .badge-free { background: #dcfce7; color: #15803d; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
-  .badge-freemium { background: #fef3c7; color: #b45309; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+  /* Download Modal */
+  .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(11, 19, 43, 0.85); z-index: 100; display: none; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(4px); }
+  .modal-box { background: #fff; width: 100%; max-width: 600px; border-radius: 12px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.3); animation: slideUp 0.3s ease; }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-head { background: var(--ais-navy); color: #fff; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 16px; }
+  .modal-body { padding: 24px; max-height: 80vh; overflow-y: auto; }
+  .guide-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 16px; border-radius: 8px; margin-bottom: 16px; }
 
-  /* AIS Verification & Checkout Hub */
-  .ais-rights-hub {
-    background: linear-gradient(135deg, #050b18 0%, #0d1e38 100%);
-    color: #ffffff;
-    border: 2px solid var(--ais-gold);
-    border-radius: 12px;
-    padding: 24px;
-    margin: 36px 0 16px;
-  }
+  /* Print Architecture (The Magic) */
+  @media print {
+    body.print-cert #app-wrapper, body.print-cert .modal-overlay { display: none !important; }
+    body.print-cert #certificate-container { display: block !important; border: 12px double #0B132B !important; margin: 0 !important; box-shadow: none !important; width: 100%; height: 100%; }
+    
+    body.print-inv #app-wrapper, body.print-inv .modal-overlay { display: none !important; }
+    body.print-inv #invoice-container { display: block !important; border: none !important; box-shadow: none !important; margin: 0 !important; width: 100%; }
 
-  .ais-hub-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-    padding-bottom: 14px;
-    margin-bottom: 16px;
-  }
-
-  .ais-hub-title h3 {
-    font-size: 17px;
-    color: #f8fafc;
-    font-weight: 700;
-  }
-
-  .ais-hub-title p {
-    font-size: 12px;
-    color: #94a3b8;
-  }
-
-  .ais-contact-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 10px;
-    margin: 16px 0;
-  }
-
-  .ais-contact-card {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 10px 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    color: #f1f5f9;
-    transition: all 0.2s ease;
-  }
-
-  .ais-contact-card:hover {
-    background: rgba(2, 132, 199, 0.2);
-    border-color: #38bdf8;
-  }
-
-  .ais-icon-wrap {
-    width: 32px;
-    height: 32px;
-    background: rgba(2, 132, 199, 0.2);
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #38bdf8;
-    flex-shrink: 0;
-  }
-
-  .ais-contact-detail strong { font-size: 12px; display: block; }
-  .ais-contact-detail span { font-size: 11px; color: #94a3b8; }
-
-  .checkout-container {
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid var(--ais-gold);
-    border-radius: 10px;
-    padding: 18px;
-    margin-top: 18px;
-  }
-
-  .price-tag {
-    font-size: 20px;
-    color: var(--ais-gold);
-    font-weight: 800;
-    margin-top: 2px;
-    display: block;
-  }
-
-  .payment-method-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
-    margin: 14px 0;
-  }
-
-  .pay-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 6px;
-    padding: 10px 12px;
-  }
-
-  .pay-tag {
-    font-size: 10px;
-    font-weight: 700;
-    color: #38bdf8;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin-bottom: 2px;
-  }
-
-  .pay-val {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .copy-sm-btn {
-    background: rgba(255,255,255,0.1);
-    border: none;
-    color: #38bdf8;
-    padding: 2px 7px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 10px;
-  }
-
-  .copy-sm-btn:hover { background: rgba(255,255,255,0.2); }
-
-  .dispatch-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 14px;
-  }
-
-  @media (max-width: 500px) {
-    .dispatch-actions { grid-template-columns: 1fr; }
-  }
-
-  .btn-dispatch {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 12px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 12px;
-    text-decoration: none;
-  }
-
-  .btn-wa { background: #25d366; color: #ffffff; }
-  .btn-mail { background: #0284c7; color: #ffffff; }
-
-  .rights-notice {
-    font-size: 11px;
-    color: #94a3b8;
-    line-height: 1.6;
-    background: rgba(0, 0, 0, 0.25);
-    padding: 10px 12px;
-    border-radius: 6px;
-    border-left: 3px solid var(--ais-gold);
-    margin-top: 16px;
-  }
-
-  .footer {
-    border-top: 1px solid var(--border);
-    padding-top: 16px;
-    margin-top: 26px;
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: var(--text-muted);
+    /* Book Print Mode */
+    body:not(.print-cert):not(.print-inv) { background: #fff; }
+    body:not(.print-cert):not(.print-inv) #app-wrapper { box-shadow: none; margin: 0; border: none; max-width: 100%; }
+    body:not(.print-cert):not(.print-inv) .brand-bar { position: static; }
+    body:not(.print-cert):not(.print-inv) .no-print, 
+    body:not(.print-cert):not(.print-inv) .btn-header,
+    body:not(.print-cert):not(.print-inv) .btn-copy,
+    body:not(.print-cert):not(.print-inv) #certificate-container,
+    body:not(.print-cert):not(.print-inv) #invoice-container,
+    body:not(.print-cert):not(.print-inv) .exam-card,
+    body:not(.print-cert):not(.print-inv) .modal-overlay,
+    body:not(.print-cert):not(.print-inv) .decision-engine-card { display: none !important; }
   }
 </style>
 </head>
 <body>
 
-<div class="ebook-container">
+<div id="app-wrapper">
 
-  <!-- AIS HEADER -->
+  <!-- BRAND HEADER -->
   <div class="brand-bar">
-    <a href="https://www.facebook.com/share/1ZSuGprkLY/" target="_blank" rel="noopener noreferrer" class="brand-logo-wrap">
-      <!-- Authentic SVG AIS Crest -->
-      <svg class="brand-crest-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M50 5 L85 20 V55 C85 75 50 95 50 95 C50 95 15 75 15 55 V20 Z" fill="#040D21" stroke="#38BDF8" stroke-width="4"/>
-        <circle cx="50" cy="50" r="28" stroke="#FBBF24" stroke-width="2.5" stroke-dasharray="4 2"/>
-        <line x1="50" y1="18" x2="50" y2="82" stroke="#38BDF8" stroke-width="2"/>
-        <line x1="18" y1="50" x2="82" y2="50" stroke="#38BDF8" stroke-width="2"/>
-        <text x="50" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="20" fill="#38BDF8" text-anchor="middle">AIS</text>
+    <a href="https://www.facebook.com/share/1ZSuGprkLY/" target="_blank" rel="noopener" class="brand-logo-wrap">
+      <!-- High-fidelity Vector AIS Logo -->
+      <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="100" fill="#0B132B"/>
+        <path d="M50 45 L100 35 L150 45 V90 C150 135 100 170 100 170 C100 170 50 135 50 90 V45 Z" class="ais-svg-stroke"/>
+        <circle cx="100" cy="95" r="30" class="ais-svg-stroke"/>
+        <line x1="100" y1="50" x2="100" y2="140" class="ais-svg-stroke"/>
+        <line x1="55" y1="95" x2="145" y2="95" class="ais-svg-stroke"/>
+        <text x="100" y="125" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="65" fill="#38BDF8" text-anchor="middle" letter-spacing="-3">AIS</text>
       </svg>
       <div>
         <span class="brand-text-name">Army IBA Specialist</span>
-        <span class="brand-text-sub">Official Digital Publication Wing</span>
+        <span class="brand-text-sub">Digital Publication Wing</span>
       </div>
     </a>
-    <div class="badge-verified-ais">
-      <i data-lucide="shield-check" style="width: 13px; height: 13px;"></i>
-      অফিসিয়াল কপিরাইট ও ভেরিফায়েড এডিশন
-    </div>
+    <button class="btn-header" id="btn-open-modal">
+      <i data-lucide="download" style="width: 14px; height: 14px;"></i> রিসোর্স ও পিডিএফ
+    </button>
   </div>
 
-  <!-- COVER SECTION -->
-  <div class="cover">
+  <!-- HERO SECTION -->
+  <div class="hero">
     <div class="cover-badge">
       <i data-lucide="cpu" style="width: 14px; height: 14px;"></i>
-      সংস্করণ ৪.০: লাইভ ডিসিশন ইঞ্জিন ও NotebookLM ক্লাসরুম
+      সংস্করণ ৪.০: মাস্টার পাবলিকেশন ও লাইভ এআই ক্লাসরুম
     </div>
     <h1>রিমোট ইনকাম ব্লুপ্রিন্ট</h1>
-    <p>জিরো স্কিল ও সাধারণ স্মার্টফোন দিয়ে আন্তর্জাতিক ক্লায়েন্ট শনাক্তকরণ, রিমোট কনভার্শন এবং লিগ্যাল ব্যাংকিং পাইপলাইনের চূড়ান্ত মেকানিকাল ফিল্ড ম্যানুয়াল</p>
+    <p>জিরো স্কিল ও সাধারণ স্মার্টফোন দিয়ে আন্তর্জাতিক ক্লায়েন্ট শনাক্তকরণ, রিমোট কনভার্শন, লিগ্যাল ব্যাংকিং পাইপলাইন ও অফিসিয়াল সার্টিফিকেশনের ফিল্ড ম্যানুয়াল</p>
 
-    <div class="cover-meta">
-      <span><i data-lucide="headphones" style="width: 14px; height: 14px; color: var(--notebook-purple);"></i> NotebookLM অডিও ক্লাসরুম</span>
-      <span><i data-lucide="compass" style="width: 14px; height: 14px;"></i> ইন্টারেক্টিভ স্কিল ইঞ্জিন</span>
-      <span><i data-lucide="smartphone" style="width: 14px; height: 14px;"></i> মোবাইল-ফার্স্ট অপারেশন</span>
-      <span><i data-lucide="shield-check" style="width: 14px; height: 14px;"></i> বাংলাদেশ ব্যাংক ও এনবিআর ভেরিফায়েড</span>
+    <div class="hero-meta">
+      <span><i data-lucide="headphones" style="color: var(--notebook-purple); width: 14px;"></i> NotebookLM অডিও ক্লাসরুম</span>
+      <span><i data-lucide="compass" style="width: 14px;"></i> ইন্টারেক্টিভ স্কিল ইঞ্জিন</span>
+      <span><i data-lucide="shield-check" style="width: 14px;"></i> বাংলাদেশ ব্যাংক ভেরিফায়েড</span>
     </div>
   </div>
 
-  <div class="content">
+  <div class="content-pad">
 
-    <!-- NOTEBOOKLM LIVE CLASSROOM HUB -->
-    <div class="notebook-classroom-box">
-      <div class="notebook-header-badge">
-        <i data-lucide="sparkles" style="width: 12px; height: 12px;"></i> অফিসিয়াল লাইভ ক্লাসরুম হাব
-      </div>
-      <div class="notebook-title">AIS Remote Income Blueprint - Classroom & Master Resources</div>
-      <p class="notebook-desc">
-        বই পড়ার পাশাপাশি প্রতিটি স্কিল, ভিডিও এডিটিংয়ের টেকনিক্যাল চেকলিস্ট, ক্লায়েন্ট আউটরিচ এবং ব্যাংকিং পলিসির বিস্তারিত অডিও লেকচার ও ইন্টারেক্টিভ প্রশ্নোত্তর সরাসরি অফিসিয়াল Gemini NotebookLM স্টাডি স্পেসে যুক্ত করা হয়েছে। ডিপ-ডাইভ অডিও শুনুন এবং এআই টিউটরকে যেকোনো প্রশ্ন করুন।
-      </p>
-
-      <div class="notebook-feature-grid">
-        <div class="notebook-feature-card">
-          <i data-lucide="volume-2" style="width: 16px; height: 16px; color: #a78bfa;"></i>
-          <span>পডকাস্ট স্টাইলের ডিপ-ডাইভ অডিও লেকচার</span>
-        </div>
-        <div class="notebook-feature-card">
-          <i data-lucide="bot" style="width: 16px; height: 16px; color: #a78bfa;"></i>
-          <span>২৪/৭ এআই স্টাডি টিউটর (Q&A Desk)</span>
-        </div>
+    <!-- NOTEBOOKLM CLASSROOM -->
+    <div class="nb-card no-print">
+      <div class="nb-badge"><i data-lucide="sparkles" style="width: 12px;"></i> লাইভ স্টাডি হাব</div>
+      <div class="notebook-title">AIS Remote Income Blueprint - Audio Classroom</div>
+      <p class="notebook-desc">বই পড়ার পাশাপাশি প্রতিটি স্কিল, এডিটিং চেকলিস্ট এবং ব্যাংকিং পলিসির ডিপ-ডাইভ অডিও লেকচার সরাসরি আমাদের অফিসিয়াল Gemini NotebookLM স্পেসে যুক্ত করা হয়েছে। হেডফোনে শুনুন এবং এআই টিউটরকে প্রশ্ন করুন।</p>
+      
+      <div class="nb-features">
+        <div class="nb-feat"><i data-lucide="volume-2" style="color: #a78bfa; width: 16px;"></i> পডকাস্ট অডিও লেকচার</div>
+        <div class="nb-feat"><i data-lucide="bot" style="color: #a78bfa; width: 16px;"></i> ২৪/৭ এআই স্টাডি টিউটর</div>
       </div>
 
-      <a href="https://gemini.google.com/notebook/6fe4bc5f-6653-49f0-932d-d95830e723fc" target="_blank" rel="noopener noreferrer" class="btn-notebook-launch">
-        <i data-lucide="external-link" style="width: 15px; height: 15px;"></i> NotebookLM ক্লাসরুমে প্রবেশ করুন
+      <a href="https://gemini.google.com/notebook/6fe4bc5f-6653-49f0-932d-d95830e723fc" target="_blank" rel="noopener noreferrer" class="btn-nb">
+        <i data-lucide="external-link" style="width: 15px;"></i> NotebookLM ক্লাসরুমে প্রবেশ করুন
       </a>
     </div>
 
-    <!-- INTERACTIVE DECISION SIMULATOR -->
-    <div class="decision-engine-card">
-      <div class="engine-header">
-        <i data-lucide="sparkles" style="width: 20px; height: 20px; color: #38bdf8;"></i>
+    <!-- DECISION SIMULATOR -->
+    <div class="decision-engine-card sim-card no-print">
+      <div class="sim-head">
+        <i data-lucide="crosshair" style="width: 24px; color: var(--ais-cyan);"></i>
         <div>
-          <h3>ইন্টারেক্টিভ স্কিল ও আর্নিং ক্যালকুলেটর</h3>
-          <p style="font-size: 12px; color: #94a3b8;">কোন পথে আপনার সবচেয়ে দ্রুত ও সর্বোচ্চ ইনকাম হবে—৩টি প্রশ্নের মাধ্যমে ফিল্টার করুন:</p>
+          <h3 style="color: var(--ais-cyan);">ইন্টারেক্টিভ স্কিল ও আর্নিং ক্যালকুলেটর</h3>
+          <p style="font-size: 12.5px; color: #94a3b8; margin-top:2px;">কোন পথে আপনার সবচেয়ে দ্রুত ইনকাম হবে—৩টি প্রশ্নের মাধ্যমে ফিল্টার করুন:</p>
         </div>
       </div>
 
-      <div class="quiz-step">
-        <span class="quiz-label">১. আপনার বর্তমান স্ট্যাটাস ও দৈনিক ফাঁকা সময় কতটুকু?</span>
-        <div class="quiz-options">
-          <button type="button" class="quiz-opt" data-cat="time" data-val="full">
-            <i data-lucide="user-x" style="width: 14px; height: 14px;"></i> বেকার / ছাত্র (৪–৬ ঘণ্টা)
-          </button>
-          <button type="button" class="quiz-opt" data-cat="time" data-val="part">
-            <i data-lucide="briefcase" style="width: 14px; height: 14px;"></i> চাকরিজীবী (১–২ ঘণ্টা)
-          </button>
+      <div class="sim-step">
+        <span class="sim-label">১. দৈনিক ফাঁকা সময় কতটুকু?</span>
+        <div class="sim-opts">
+          <button class="sim-opt" data-cat="time" data-val="full"><i data-lucide="user-x" style="width:14px;"></i> বেকার / ছাত্র (৪-৬ ঘণ্টা)</button>
+          <button class="sim-opt" data-cat="time" data-val="part"><i data-lucide="briefcase" style="width:14px;"></i> চাকরিজীবী (১-২ ঘণ্টা)</button>
         </div>
       </div>
 
-      <div class="quiz-step">
-        <span class="quiz-label">২. আপনার ইংরেজি কমিউনিকেশনের বর্তমান অবস্থা কেমন?</span>
-        <div class="quiz-options">
-          <button type="button" class="quiz-opt" data-cat="eng" data-val="low">
-            <i data-lucide="message-square-off" style="width: 14px; height: 14px;"></i> দুর্বল / ভয় আছে
-          </button>
-          <button type="button" class="quiz-opt" data-cat="eng" data-val="mid">
-            <i data-lucide="message-square" style="width: 14px; height: 14px;"></i> টেক্সট মেসেজিং সম্ভব
-          </button>
-          <button type="button" class="quiz-opt" data-cat="eng" data-val="high">
-            <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i> ভালো ও আত্মবিশ্বাসী
-          </button>
+      <div class="sim-step">
+        <span class="sim-label">২. ইংরেজি কমিউনিকেশন কেমন?</span>
+        <div class="sim-opts">
+          <button class="sim-opt" data-cat="eng" data-val="low"><i data-lucide="message-square-off" style="width:14px;"></i> দুর্বল / জিরো স্পোকেন</button>
+          <button class="sim-opt" data-cat="eng" data-val="mid"><i data-lucide="message-square" style="width:14px;"></i> পড়ে বুঝতে পারি (টেক্সট)</button>
         </div>
       </div>
 
-      <div class="quiz-step">
-        <span class="quiz-label">৩. আপনার সবচেয়ে পছন্দের কাজের ধরণ কোনটি?</span>
-        <div class="quiz-options">
-          <button type="button" class="quiz-opt" data-cat="pref" data-val="visual">
-            <i data-lucide="film" style="width: 14px; height: 14px;"></i> ভিজ্যুয়াল কনটেন্ট (ভিডিও/গ্রাফিক্স)
-          </button>
-          <button type="button" class="quiz-opt" data-cat="pref" data-val="data">
-            <i data-lucide="table" style="width: 14px; height: 14px;"></i> ডাটা ও স্প্রেডশিট রিসার্চ
-          </button>
-          <button type="button" class="quiz-opt" data-cat="pref" data-val="ops">
-            <i data-lucide="mail" style="width: 14px; height: 14px;"></i> ইমেইল ও অ্যাসিস্ট্যান্ট সাপোর্ট
-          </button>
+      <div class="sim-step">
+        <span class="sim-label">৩. পছন্দের কাজ কোনটি?</span>
+        <div class="sim-opts">
+          <button class="sim-opt" data-cat="pref" data-val="visual"><i data-lucide="film" style="width:14px;"></i> ভিডিও/গ্রাফিক্স</button>
+          <button class="sim-opt" data-cat="pref" data-val="data"><i data-lucide="table" style="width:14px;"></i> লিড রিসার্চ ও ডাটা</button>
         </div>
       </div>
 
-      <div class="engine-result-panel" id="engine-result">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-          <h4 id="res-title" style="color: #38bdf8; font-size: 15px; font-weight: 700;"></h4>
-          <span id="res-badge" class="badge-free">মাস্টার চয়েস</span>
+      <div class="sim-res" id="engine-result">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h4 id="res-title" style="color:var(--ais-cyan); font-size:16px; font-weight:800;"></h4>
+          <span style="background:rgba(16,185,129,0.2); color:#34d399; font-size:10px; font-weight:800; padding:3px 8px; border-radius:4px;">মাস্টার চয়েস</span>
         </div>
-        <p id="res-desc" style="font-size: 12.5px; color: #cbd5e1; margin-bottom: 10px;"></p>
-        
-        <div class="result-metric-grid">
-          <div class="result-metric-card">
-            <span class="metric-label">মাসিক আয়ের সম্ভাব্য সীমা</span>
-            <span class="metric-value" id="res-earning"></span>
-          </div>
-          <div class="result-metric-card">
-            <span class="metric-label">দক্ষতা অর্জনে সময়</span>
-            <span class="metric-value" id="res-time"></span>
-          </div>
-          <div class="result-metric-card">
-            <span class="metric-label">কাজের সেরা প্ল্যাটফর্ম</span>
-            <span class="metric-value" id="res-platform"></span>
-          </div>
+        <p id="res-desc" style="font-size:13px; color:#cbd5e1; margin-bottom:14px; line-height:1.6;"></p>
+        <div class="grid-2" style="margin:0; gap:12px;">
+          <div class="res-metric"><span class="metric-label">মাসিক আয়</span><span class="metric-value" id="res-earning"></span></div>
+          <div class="res-metric"><span class="metric-label">সেরা প্ল্যাটফর্ম</span><span class="metric-value" id="res-platform"></span></div>
         </div>
       </div>
     </div>
 
-    <!-- CHAPTER 1: MINDSET & FUNNEL -->
-    <div class="chapter-header">
-      <i data-lucide="trending-up"></i>
-      <h2>অধ্যায় ১: লোকাল সিন্ডিকেট ডিসেকশন ও প্রোবাবিলিটি ম্যাথ</h2>
+    <!-- CHAPTER 1: Success Guide & Mindset -->
+    <div class="chapter-head">
+      <i data-lucide="target"></i><h2>অধ্যায় ১: সাকসেস গাইডলাইন ও প্রো-টিপস</h2>
     </div>
-
-    <p>আন্তর্জাতিক ক্লায়েন্ট পাওয়ার ভিত্তি কোনো ম্যাজিক নয়; এটি ১০০% <strong>পরিসংখ্যান ও নিখুঁত সংখ্যার খেলা</strong>।</p>
-
-    <div class="funnel-container">
-      <div class="funnel-stage">
-        <span><strong>ধাপ ১: ভ্যালু-ফার্স্ট আউটরিচ প্রেরণ</strong> (স্যাম্পল উপহার সহ)</span>
-        <span class="funnel-rate">১০০ টি সুনির্দিষ্ট মেসেজ</span>
-      </div>
-      <div class="funnel-stage">
-        <span><strong>ধাপ ২: ক্লায়েন্ট রিপ্লাই ও প্রাথমিক আলোচনা</strong></span>
-        <span class="funnel-rate">৬ – ৮ টি উত্তর (৬-৮%)</span>
-      </div>
-      <div class="funnel-stage">
-        <span><strong>ধাপ ৩: টেস্ট স্যাম্পল রিভিউ ও প্যাকেজ সিলেকশন</strong></span>
-        <span class="funnel-rate">২ – ৩ জন ক্লায়েন্ট</span>
-      </div>
-      <div class="funnel-stage" style="background: #f0fdf4; border-color: #bbf7d0;">
-        <span><strong style="color: var(--accent-dark);">ধাপ ৪: চূড়ান্ত মাসিক চুক্তি (Monthly Retainer)</strong></span>
-        <span class="funnel-rate" style="background: #dcfce7; color: #166534;">১ জন ফিক্সড ক্লায়েন্ট ($২৫০–$৪৫০/মাস)</span>
-      </div>
-    </div>
-
-    <!-- CHAPTER 2: PRODUCTION BLUEPRINT -->
-    <div class="chapter-header">
-      <i data-lucide="sliders"></i>
-      <h2>অধ্যায় ২: মোবাইল প্রোডাকশন ও জিরো-ফ্রিকশন ডেলিভারি</h2>
-    </div>
-
+    <p>বাংলাদেশে ৯৫% নতুন ফ্রিল্যান্সার প্রথম ২১ দিনে ব্যর্থ হয়ে সরে যান। কারণ তারা ভাবেন ক্লায়েন্ট তাদের দয়া করে কাজ দেবে। আন্তর্জাতিক ক্লায়েন্ট পাওয়ার ভিত্তি কোনো ম্যাজিক নয়; এটি ১০০% <strong>পরিসংখ্যান ও নিখুঁত সংখ্যার খেলা</strong>।</p>
+    
     <div class="grid-2">
-      <div class="card">
-        <div class="card-title" style="color: var(--primary);">
-          <i data-lucide="video" style="width: 16px; height: 16px;"></i> CapCut মোবাইল এডিটিং রুলস
-        </div>
-        <ul style="padding-left: 18px; font-size: 12.5px; color: var(--text-muted); line-height: 1.6;">
-          <li><strong>Outro Watermark ডিলিট:</strong> টাইমলাইনের শেষে থাকা ২ সেকেন্ডের কালো CapCut লোগো ক্লিপটি ট্যাপ করে নিশ্চিতভাবে Delete করুন।</li>
-          <li><strong>০.৩ সেকেন্ড কাটিং রুল:</strong> কথার মাঝের ০.৩ সেকেন্ডের বেশি কোনো নীরবতা রাখবেন না।</li>
-          <li><strong>অটো-ক্যাপশন:</strong> বাউন্সি পপ অ্যানিমেশন দিন। প্রতি ফ্রেমে ১–২ শব্দ ফ্ল্যাশ করবে।</li>
-          <li><strong>১০৮০p ৬০fps এক্সপোর্ট:</strong> এক্সপোর্ট সেটিংসে হাই-কোয়ালিটি সিলেক্ট করুন।</li>
-        </ul>
+      <div class="card card-warning">
+        <div class="card-title"><i data-lucide="activity" style="width: 18px;"></i> ১০০:৬:১ ফানেল রুল</div>
+        <p>১০০টি টার্গেটেড আউটরিচ মেসেজ পাঠালে ৬টি পজিটিভ রিপ্লাই আসবে এবং সেখান থেকে ১টি মাসিক রিটেইনার ($২৫০-$৪৫০) কনফার্ম হবে। প্রথম ১০ দিনে রিপ্লাই না পেলেও কাজ থামানো যাবে না।</p>
       </div>
-
-      <div class="card">
-        <div class="card-title" style="color: var(--accent-dark);">
-          <i data-lucide="play-circle" style="width: 16px; height: 16px;"></i> আনলিস্টেড ইউটিউব মেথড
-        </div>
-        <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.6;">
-          গুগল ড্রাইভে ফাইল ডাউনলোড করার ঝামেলা এড়াতে আপনার ফোনে এডিট করা শর্ট ভিডিওটি ইউটিউবে আপলোড করে ভিজিবিলিটি দিন <strong>"Unlisted"</strong>। ক্লায়েন্ট লিংকে ট্যাপ করলেই কোনো সাইন-ইন বা ডাউনলোড ছাড়া সরাসরি ৬০fps-এ প্রিভিউ দেখতে পাবে।
-        </p>
+      <div class="card card-danger">
+        <div class="card-title"><i data-lucide="eye" style="width: 18px;"></i> ৫ সেকেন্ড ও স্কুইন্ট টেস্ট (Squint Test)</div>
+        <p>ক্লায়েন্টের মনযোগ আকর্ষণের সর্বোচ্চ সময় ৫ সেকেন্ড। ক্যানভায় থাম্বনেইল ডিজাইনের পর ফোনটি দেড় হাত দূরে রাখুন। চোখ ছোট করে দেখুন ৩ শব্দের লেখাটি স্পষ্ট পড়া যায় কি না। পড়া না গেলে ক্লায়েন্টও ক্লিক করবে না।</p>
       </div>
     </div>
 
-    <!-- CHAPTER 3: AI PROMPT PACK -->
-    <div class="chapter-header">
-      <i data-lucide="cpu"></i>
-      <h2>অধ্যায় ৩: মাস্টার এআই প্রম্পট প্যাক ও কমান্ড ডিরেক্টরি</h2>
+    <!-- CHAPTER 2: AIS Platform Directory -->
+    <div class="chapter-head">
+      <i data-lucide="layers"></i><h2>অধ্যায় ২: রিমোট জব প্ল্যাটফর্ম ডিরেক্টরি (AIS Verified)</h2>
+    </div>
+    <p>কাজের ধরন অনুযায়ী সঠিক প্ল্যাটফর্ম নির্বাচন করা আয়ের প্রথম শর্ত। জেনেরিক প্রোফাইল তৈরি না করে একটি সুনির্দিষ্ট মাইক্রো-নিশ টার্গেট করুন।</p>
+
+    <div class="tbl-wrap">
+      <table class="data-table data-tbl">
+        <thead>
+          <tr>
+            <th>ক্যাটাগরি</th>
+            <th>প্ল্যাটফর্ম</th>
+            <th>কাজের ধরন ও কাদের জন্য?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>টেক ও আইটি</strong></td>
+            <td>Toptal, Turing, Upwork</td>
+            <td>সফটওয়্যার ডেভেলপমেন্ট, বাগ ফিক্সিং। (Toptal/Turing ৩-৫ বছরের অভিজ্ঞ এলিটদের জন্য, Upwork সবার জন্য)।</td>
+          </tr>
+          <tr>
+            <td><strong>ব্যাংকিং ও ফাইন্যান্স</strong></td>
+            <td>GLG, AlphaSights, Paro</td>
+            <td>এক্সপার্ট কনসাল্টিং। দীর্ঘ অভিজ্ঞতাসম্পন্ন ব্যাংকার, রিস্ক অ্যানালিস্ট বা কর্পোরেট লিডারদের জন্য।</td>
+          </tr>
+          <tr>
+            <td><strong>মেডিকেল ও সায়েন্স</strong></td>
+            <td>Kolabtree, ScribeAmerica</td>
+            <td>সায়েন্টিফিক রিসার্চ, রিমোট স্ক্রাইবিং। মেডিকেল স্টুডেন্ট বা ডাক্তারদের জন্য।</td>
+          </tr>
+          <tr>
+            <td><strong>জিরো-স্কিল / মাইক্রো</strong></td>
+            <td>Outlier.ai, Rev, MTurk</td>
+            <td>এআই মডেল ট্রেইনিং, অডিও টাইপিং। নতুনদের জন্য যারা বেসিক ইংরেজিতে নির্ভুল কাজ করতে পারেন।</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <div class="interactive-box">
-      <div class="box-label">প্রম্পট ১: রাফ আইডিয়া থেকে ৩-বাক্যের আমেরিকান পিচ</div>
-      <div class="script-content">Act as an elite B2B sales copywriter specializing in video creator outreach for Army IBA Specialist (AIS) workflows. 
+    <div class="card card-success">
+      <div class="card-title"><i data-lucide="check-circle" style="width:18px;"></i> ৩টি ইউনিভার্সাল রুলস</div>
+      <ul style="padding-left: 20px; margin-top: 8px;">
+        <li><strong>প্রুফ-অব-ওয়ার্ক (Proof of Work):</strong> ডিগ্রির চেয়ে স্যাম্পল (যেমন ফাইন্যান্স এক্সপার্টদের জন্য ডামি মডেল বা এডিটরদের আনলিস্টেড ভিডিও) বেশি কাজ দেয়।</li>
+        <li><strong>কি-ওয়ার্ড অপটিমাইজেশন:</strong> "React Native Expert" বা "Healthcare Writer" এর মতো স্পেসিফিক টাইটেল ব্যবহার করুন।</li>
+        <li><strong>ইনিশিয়াল রেটিং স্ট্র্যাটেজি:</strong> শুরুতে আয়ের চেয়ে প্রথম ২-৩টি কাজে ফাইভ-স্টার রিভিউয়ের দিকে ফোকাস করুন।</li>
+      </ul>
+    </div>
+
+    <!-- CHAPTER 3: AI Prompts & Workflow -->
+    <div class="chapter-head">
+      <i data-lucide="cpu"></i><h2>অধ্যায় ৩: মাস্টার এআই প্রম্পট প্যাক ও আউটরিচ ইঞ্জিন</h2>
+    </div>
+    <p>ফ্রি জিমেইল থেকে কর্পোরেট ডোমেইনে মেইল দিলে তা স্প্যামে যায়। তাই X (Twitter) বা LinkedIn ইনবক্স ব্যবহার করুন। <strong>"Dear" বা "Respected Sir" এর মতো শব্দ সম্পূর্ণ নিষিদ্ধ।</strong></p>
+
+    <div class="term-box">
+      <div class="term-lbl">প্রম্পট ১: ৩-বাক্যের আমেরিকান পিচ</div>
+      <div>Act as an elite B2B sales copywriter specializing in video creator outreach for Army IBA Specialist (AIS) workflows. 
 I have created a 40-second optimized sample Short for a US YouTube creator named [Target Creator Name]. 
-The creator's niche is [Podcasting / Fitness / SaaS / Real Estate]. 
 The core value I built: Pattern interrupt hook, dynamic subtitle pacing, removal of silence, and sound effects.
 
 Write a 3-sentence, high-conversion cold message in clear, polite, and confident American business tone.
-Strict Constraints:
-- Sentence 1: Acknowledge a specific point from their recent content without generic praise.
-- Sentence 2: Provide the 1-click preview link directly showing the edited asset built specifically for them: [Insert Unlisted YouTube Shorts Link].
-- Sentence 3: Frictionless call-to-action proposing an ongoing automated monthly package.
-- DO NOT use words like "Dear", "Respected Sir", "Delighted", "Humble", or "Looking for a job".
-- Output only the final message ready to copy.</div>
-      <button type="button" class="copy-btn" data-copy="Act as an elite B2B sales copywriter specializing in video creator outreach for Army IBA Specialist (AIS) workflows.&#10;I have created a 40-second optimized sample Short for a US YouTube creator named [Target Creator Name].&#10;The creator's niche is [Podcasting / Fitness / SaaS / Real Estate].&#10;The core value I built: Pattern interrupt hook, dynamic subtitle pacing, removal of silence, and sound effects.&#10;&#10;Write a 3-sentence, high-conversion cold message in clear, polite, and confident American business tone.&#10;Strict Constraints:&#10;- Sentence 1: Acknowledge a specific point from their recent content without generic praise.&#10;- Sentence 2: Provide the 1-click preview link directly showing the edited asset built specifically for them: [Insert Unlisted YouTube Shorts Link].&#10;- Sentence 3: Frictionless call-to-action proposing an ongoing automated monthly package.&#10;- DO NOT use words like &quot;Dear&quot;, &quot;Respected Sir&quot;, &quot;Delighted&quot;, &quot;Humble&quot;, or &quot;Looking for a job&quot;.&#10;- Output only the final message ready to copy.">
-        <i data-lucide="copy" style="width: 12px; height: 12px;"></i> Copy Prompt
+- Sentence 1: Acknowledge a specific point from their content.
+- Sentence 2: Provide the 1-click preview link: [Insert Unlisted YouTube Shorts Link].
+- Sentence 3: Frictionless call-to-action for a monthly package.
+- DO NOT use words like "Dear", "Respected Sir", or "Humble". Output only the final message.</div>
+      <button class="btn-copy no-print" data-copy="Act as an elite B2B sales copywriter specializing in video creator outreach for Army IBA Specialist (AIS) workflows. I have created a 40-second optimized sample Short for a US YouTube creator named [Target Creator Name]. The core value I built: Pattern interrupt hook, dynamic subtitle pacing, removal of silence, and sound effects. Write a 3-sentence, high-conversion cold message in clear, polite, and confident American business tone. - Sentence 1: Acknowledge a specific point from their content. - Sentence 2: Provide the 1-click preview link: [Insert Unlisted YouTube Shorts Link]. - Sentence 3: Frictionless call-to-action for a monthly package. - DO NOT use words like 'Dear', 'Respected Sir', or 'Humble'. Output only the final message.">
+        <i data-lucide="copy" style="width: 14px;"></i> Copy Prompt
       </button>
     </div>
 
-    <!-- CHAPTER 4: BANKING & COMPLIANCE -->
-    <div class="chapter-header">
-      <i data-lucide="scale"></i>
-      <h2>অধ্যায় ৪: বৈধ ব্যাংকিং, $১৫০ থ্রেশহোল্ড রুল ও এনবিআর রিটার্ন</h2>
+    <!-- CHAPTER 4: Banking & Compliance -->
+    <div class="chapter-head">
+      <i data-lucide="scale"></i><h2>অধ্যায় ৪: বাংলাদেশ ব্যাংক পলিসি ও $১৫০ ক্যাশ-আউট রুল</h2>
     </div>
 
-    <div class="card card-success" style="margin-bottom: 14px;">
-      <div class="card-title"><i data-lucide="dollar-sign" style="width: 16px; height: 16px;"></i> দ্য $১৫০ ক্যাশ-আউট স্ট্র্যাটেজি ($150 Threshold Rule)</div>
-      <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.6;">
-        • <strong>$১৫০-এর নিচে হলে:</strong> জরুরি খরচের জন্য সরাসরি bKash Remittance-এ তুলুন (২ মিনিটে ক্যাশ আউট, কিন্তু ডলার রেট ২-৩ টাকা কম পাবেন)।<br>
-        • <strong>$১৫০-এর বেশি হলে:</strong> সরাসরি লোকাল ব্যাংক একাউন্টে (City Bank, EBL, BRAC Bank, Trust Bank PLC) উইথড্র করুন। এতে আপনি ফুল ইন্টারব্যাংক এক্সচেঞ্জ রেট পাবেন এবং সরকারি <strong>২.৫% নগদ প্রণোদনার</strong> অফিশিয়াল সার্টিফিকেট (PRC) পাবেন।
-      </p>
+    <div class="grid-2">
+      <div class="card card-warning">
+        <div class="card-title"><i data-lucide="alert-triangle" style="width:18px;"></i> AML নেম-ম্যাচ রুল</div>
+        <p>আপনার স্মার্ট এনআইডি, লোকাল ব্যাংক অ্যাকাউন্ট এবং Payoneer এর নাম ও জন্মতারিখ হুবহু এক হতে হবে। এক অক্ষরের ভুলে ১৪-৩০ দিন পেমেন্ট আটকে যেতে পারে।</p>
+      </div>
+      <div class="card card-success">
+        <div class="card-title"><i data-lucide="dollar-sign" style="width:18px;"></i> দ্য $১৫০ ক্যাশ-আউট স্ট্র্যাটেজি</div>
+        <p>পেমেন্ট $১৫০ এর নিচে হলে সরাসরি bKash Remittance ব্যবহার করুন। $১৫০ এর বেশি হলে ২.৫% সরকারি প্রণোদনা পেতে ব্যাংক উইথড্র ব্যবহার করুন এবং NBR-এ জিরো রিটার্ন দাখিল করুন।</p>
+      </div>
     </div>
 
-    <!-- AIS VERIFICATION & CHECKOUT HUB -->
-    <div class="ais-rights-hub">
-      <div class="ais-hub-header">
-        <!-- Prominent Crest Inside Checkout Hub -->
-        <svg class="brand-crest-svg" style="width: 48px; height: 48px;" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M50 5 L85 20 V55 C85 75 50 95 50 95 C50 95 15 75 15 55 V20 Z" fill="#040D21" stroke="#FBBF24" stroke-width="4"/>
-          <circle cx="50" cy="50" r="28" stroke="#38BDF8" stroke-width="2.5" stroke-dasharray="4 2"/>
-          <line x1="50" y1="18" x2="50" y2="82" stroke="#FBBF24" stroke-width="2"/>
-          <line x1="18" y1="50" x2="82" y2="50" stroke="#FBBF24" stroke-width="2"/>
-          <text x="50" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="20" fill="#38BDF8" text-anchor="middle">AIS</text>
+    <!-- CERTIFICATION EXAM ENGINE -->
+    <div class="exam-card no-print">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <i data-lucide="award" style="width: 40px; height: 40px; color: var(--primary); margin-bottom: 10px;"></i>
+        <h3 style="font-size: 20px; font-weight: 800; color: var(--text-main);">AIS অফিসিয়াল সার্টিফিকেশন এক্সাম</h3>
+        <p style="font-size: 13.5px; color: var(--text-muted);">নিচের ৫টি প্রশ্নের সঠিক উত্তর দিয়ে আপনার "Certificate of Completion" জেনারেট করুন। (পাস মার্ক: ৮০%)</p>
+      </div>
+
+      <div id="exam-questions">
+        <div class="exam-q">
+          <div class="q-title">১. ক্লায়েন্টের মনোযোগ আকর্ষণের সর্বোচ্চ সময় (AIS রুল) কত?</div>
+          <label class="q-opt" data-q="1" data-val="false"><input type="radio" name="q1" hidden> ক. ৩০ সেকেন্ড</label>
+          <label class="q-opt" data-q="1" data-val="true"><input type="radio" name="q1" hidden> খ. ৫ সেকেন্ড</label>
+          <label class="q-opt" data-q="1" data-val="false"><input type="radio" name="q1" hidden> গ. ১ মিনিট</label>
+        </div>
+        <div class="exam-q">
+          <div class="q-title">২. আউটরিচ মেসেজে কোন শব্দটি ব্যবহার করা সম্পূর্ণ নিষিদ্ধ?</div>
+          <label class="q-opt" data-q="2" data-val="false"><input type="radio" name="q2" hidden> ক. Hi [Name]</label>
+          <label class="q-opt" data-q="2" data-val="false"><input type="radio" name="q2" hidden> খ. Preview Link</label>
+          <label class="q-opt" data-q="2" data-val="true"><input type="radio" name="q2" hidden> গ. Respected Sir</label>
+        </div>
+        <div class="exam-q">
+          <div class="q-title">৩. ভিডিও ডেলিভারির জিরো-ফ্রিকশন পদ্ধতি কোনটি?</div>
+          <label class="q-opt" data-q="3" data-val="false"><input type="radio" name="q3" hidden> ক. গুগল ড্রাইভ জিপ ফাইল</label>
+          <label class="q-opt" data-q="3" data-val="true"><input type="radio" name="q3" hidden> খ. আনলিস্টেড ইউটিউব লিংক</label>
+        </div>
+        <div class="exam-q">
+          <div class="q-title">৪. $১৫০ এর বেশি পেমেন্ট হলে কোথায় উইথড্র করা উচিত?</div>
+          <label class="q-opt" data-q="4" data-val="true"><input type="radio" name="q4" hidden> ক. লোকাল ব্যাংক অ্যাকাউন্টে (২.৫% প্রণোদনা পেতে)</label>
+          <label class="q-opt" data-q="4" data-val="false"><input type="radio" name="q4" hidden> খ. সরাসরি বিকাশে</label>
+        </div>
+        <div class="exam-q">
+          <div class="q-title">৫. AML নেম-ম্যাচ রুল অনুযায়ী কাদের নাম হুবহু এক হতে হবে?</div>
+          <label class="q-opt" data-q="5" data-val="true"><input type="radio" name="q5" hidden> ক. স্মার্ট এনআইডি, ব্যাংক ও পেওনিয়ার</label>
+          <label class="q-opt" data-q="5" data-val="false"><input type="radio" name="q5" hidden> খ. ফেসবুক প্রোফাইল ও জিমেইল</label>
+        </div>
+      </div>
+      <button class="btn-submit" id="btn-submit-exam">উত্তরপত্র জমা দিন</button>
+      <div id="exam-feedback"></div>
+    </div>
+
+    <!-- CERTIFICATE RENDER CONTAINER (Hidden until passed) -->
+    <div id="certificate-container">
+      <svg class="cert-watermark" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="100" fill="#0B132B"/>
+        <path d="M50 45 L100 35 L150 45 V90 C150 135 100 170 100 170 C100 170 50 135 50 90 V45 Z" class="ais-svg-stroke"/>
+        <circle cx="100" cy="95" r="30" class="ais-svg-stroke"/>
+        <line x1="100" y1="50" x2="100" y2="140" class="ais-svg-stroke"/>
+        <line x1="55" y1="95" x2="145" y2="95" class="ais-svg-stroke"/>
+        <text x="100" y="125" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="65" fill="#38BDF8" text-anchor="middle" letter-spacing="-3">AIS</text>
+      </svg>
+      
+      <div style="display:flex; justify-content:center; margin-bottom:16px;">
+        <svg style="width: 60px; height: 60px;" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="100" fill="#0B132B"/>
+          <path d="M50 45 L100 35 L150 45 V90 C150 135 100 170 100 170 C100 170 50 135 50 90 V45 Z" class="ais-svg-stroke"/>
+          <text x="100" y="130" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="65" fill="#38BDF8" text-anchor="middle" letter-spacing="-3">AIS</text>
         </svg>
-        <div class="ais-hub-title">
-          <h3>Army IBA Specialist (AIS)</h3>
-          <p>অফিসিয়াল পাবলিকেশন, ডিস্ট্রিবিউশন ও লিগ্যাল কপিরাইট সাপোর্ট হাব</p>
-        </div>
       </div>
 
-      <p style="font-size: 12.5px; color: #cbd5e1; margin-bottom: 12px;">
-        এই "রিমোট ইনকাম ব্লুপ্রিন্ট" সম্পূর্ণভাবে <strong>Army IBA Specialist (AIS)</strong> দ্বারা পরিচালিত, সত্যায়িত ও সংরক্ষিত। যেকোনো সহায়তায় আমাদের সাথে যোগাযোগ করুন:
+      <div class="cert-header">Certificate of Completion</div>
+      <div class="cert-sub">Army IBA Specialist — Digital Operations Wing</div>
+
+      <div style="font-size: 15px; margin-top:24px;">This is to proudly certify that</div>
+      <div class="cert-name-line" id="cert-dynamic-name">Student Name</div>
+      
+      <p class="cert-body">
+        has successfully passed the comprehensive assessment on the <strong>Remote Income Blueprint (Version 4.0)</strong>, demonstrating mastery in mobile-first proof-of-work production, zero-friction client acquisition, and Bangladesh Bank banking & AML compliance.
       </p>
 
-      <div class="ais-contact-grid">
-        <a href="https://www.facebook.com/share/1ZSuGprkLY/" target="_blank" rel="noopener noreferrer" class="ais-contact-card">
-          <div class="ais-icon-wrap"><i data-lucide="facebook" style="width: 16px; height: 16px;"></i></div>
-          <div class="ais-contact-detail">
-            <strong>অফিসিয়াল ফেসবুক পেজ</strong>
-            <span>fb.com/Army-IBA-Specialist</span>
-          </div>
-        </a>
-
-        <a href="https://wa.me/8801410761298" target="_blank" rel="noopener noreferrer" class="ais-contact-card">
-          <div class="ais-icon-wrap"><i data-lucide="message-circle" style="width: 16px; height: 16px;"></i></div>
-          <div class="ais-contact-detail">
-            <strong>হোয়াটসঅ্যাপ সাপোর্ট লাইন</strong>
-            <span>+880 1410-761298</span>
-          </div>
-        </a>
-
-        <a href="mailto:armyibaspecialist@gmail.com" class="ais-contact-card">
-          <div class="ais-icon-wrap"><i data-lucide="mail" style="width: 16px; height: 16px;"></i></div>
-          <div class="ais-contact-detail">
-            <strong>অফিসিয়াল ই-মেইল ডেস্ক</strong>
-            <span>armyibaspecialist@gmail.com</span>
-          </div>
-        </a>
+      <div class="cert-footer">
+        <div>
+          <div style="font-size:12px;">Credential ID:</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-weight:800; font-size:15px; color:var(--primary-dark);" id="cert-dynamic-id">AIS-RIB-2026-0000</div>
+          <div style="font-size:12px; margin-top:4px;">Date of Issue: <span id="cert-dynamic-date" style="font-weight:700;"></span></div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family: 'Cinzel', serif; font-weight: 800; font-size: 18px; color: var(--ais-navy);">Army IBA Specialist</div>
+          <div style="font-size:11px; color:var(--primary);">Official Verified Seal</div>
+        </div>
       </div>
+      <button class="btn-action-outline no-print" onclick="printIsolated('cert')"><i data-lucide="printer" style="width:16px;"></i> সার্টিফিকেট প্রিন্ট করুন</button>
+    </div>
 
-      <!-- CHECKOUT CONTAINER -->
-      <div class="checkout-container">
-        <div style="text-align: center; margin-bottom: 12px;">
-          <span style="font-size: 11px; color: #94a3b8; text-transform: uppercase; font-weight: 700;">অফিসিয়াল ডিজিটাল বুকস্টোর</span>
-          <h4 style="font-size: 15.5px; color: #f8fafc; font-weight: 700;">সম্পূর্ণ ব্লুপ্রিন্ট, ক্লাসরুম অ্যাক্সেস ও রিসোর্স বান্ডেল সংগ্রহ করুন</h4>
-          <span class="price-tag">৳২৯৯ মাত্র</span>
-        </div>
-
-        <div class="payment-method-grid">
-          <div class="pay-card">
-            <div class="pay-tag"><i data-lucide="smartphone" style="width: 12px; height: 12px;"></i> bKash (Personal)</div>
-            <div class="pay-val">
-              <span>01715219176</span>
-              <button type="button" class="copy-sm-btn" data-copy="01715219176">Copy</button>
-            </div>
-          </div>
-
-          <div class="pay-card">
-            <div class="pay-tag"><i data-lucide="smartphone" style="width: 12px; height: 12px;"></i> Nagad (Personal)</div>
-            <div class="pay-val">
-              <span>01708761298</span>
-              <button type="button" class="copy-sm-btn" data-copy="01708761298">Copy</button>
-            </div>
-          </div>
-
-          <div class="pay-card" style="grid-column: 1 / -1;">
-            <div class="pay-tag"><i data-lucide="building" style="width: 12px; height: 12px;"></i> Trust Bank PLC (NPSB / Bank Transfer)</div>
-            <div style="font-size: 12px; color: #e2e8f0; line-height: 1.5; margin-top: 4px;">
-              <div><strong>A/C No:</strong> <span style="font-family: 'JetBrains Mono'; color: #38bdf8;">00110466000494</span> <button type="button" class="copy-sm-btn" data-copy="00110466000494">Copy</button></div>
-              <div><strong>A/C Title:</strong> Rizum khan</div>
-              <div><strong>Branch:</strong> Jalalabad Cantonment Branch</div>
-            </div>
-          </div>
-        </div>
-
-        <div style="font-size: 12px; color: #cbd5e1; background: rgba(2, 132, 199, 0.15); padding: 10px 12px; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.3);">
-          <strong>বইটি পাওয়ার নিয়ম:</strong> যেকোনো মাধ্যমে <strong>৳২৯৯</strong> পাঠিয়ে ট্রানজেকশন আইডি (TrxID) বা স্টেটমেন্টের স্ক্রিনশট নিচের হোয়াটসঅ্যাপ অথবা ই-মেইলে পাঠিয়ে দিন। ভেরিফিকেশনের সাথে সাথে সম্পূর্ণ ব্লুপ্রিন্ট ও রিসোর্স বান্ডেল পাঠিয়ে দেওয়া হবে।
-        </div>
-
-        <div class="dispatch-actions">
-          <a href="https://wa.me/8801410761298?text=Hello%20AIS,%20I%20have%20sent%20money%20for%20the%20Remote%20Income%20Blueprint.%20Here%20is%20my%20TrxID/Screenshot:" target="_blank" rel="noopener noreferrer" class="btn-dispatch btn-wa">
-            <i data-lucide="message-circle" style="width: 15px; height: 15px;"></i> WhatsApp-এ TrxID পাঠান
-          </a>
-
-          <a href="mailto:armyibaspecialist@gmail.com?subject=Payment%20Proof%20for%20Remote%20Income%20Blueprint&body=Hello%20AIS%20Team,%0A%0AI%20have%20transferred%20the%20payment%20of%20BDT%20299.%0AMy%20Transaction%20Details/TrxID:%20" class="btn-dispatch btn-mail">
-            <i data-lucide="mail" style="width: 15px; height: 15px;"></i> ই-মেইলে TrxID পাঠান
-          </a>
+    <!-- CHECKOUT & INVOICE HUB -->
+    <div class="checkout-hub no-print">
+      <div class="hub-title">
+        <svg style="width:45px; height:45px;" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="100" fill="#0B132B"/><text x="100" y="130" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="65" fill="#FBBF24" text-anchor="middle" letter-spacing="-3">AIS</text>
+        </svg>
+        <div>
+          <h3 style="font-size: 19px; font-weight: 800;">অফিসিয়াল AIS ডিজিটাল বুকস্টোর</h3>
+          <p style="font-size: 13px; color: #cbd5e1;">সম্পূর্ণ ব্লুপ্রিন্ট, রিসোর্স বান্ডেল ও অডিও ক্লাসরুম অ্যাক্সেস</p>
         </div>
       </div>
 
-      <div class="rights-notice">
-        <strong>কপিরাইট ও বিতরণ সংক্রান্ত নির্দেশিকা:</strong> এই ফিল্ড ম্যানুয়ালের যাবতীয় বুদ্ধিবৃত্তিক স্বত্ব <strong>Army IBA Specialist (AIS)</strong>-এর নিজস্ব নিয়ন্ত্রণাধীন। AIS-এর অফিশিয়াল অনুমতি ব্যতীত এই ব্লুপ্রিন্টটি কোনো প্রকার অননুমোদিত প্ল্যাটফর্মে পুনঃবিক্রয়, বাণিজ্যিক বিতরণ বা বিকৃত করা কপিরাইট আইন ও আইসিটি অ্যাক্ট অনুযায়ী সম্পূর্ণ দণ্ডনীয় অপরাধ।
+      <div style="text-align: center; margin-bottom: 24px;">
+        <span style="font-size: 28px; font-weight: 800; color: var(--ais-gold);">৳২৯৯ মাত্র</span>
+      </div>
+
+      <div class="pay-grid">
+        <div class="pay-card">
+          <div class="pay-tag"><i data-lucide="smartphone" style="width:14px;"></i> bKash (Personal)</div>
+          <div class="pay-val">01715219176 <button class="copy-sm-btn" data-copy="01715219176">Copy</button></div>
+        </div>
+        <div class="pay-card">
+          <div class="pay-tag"><i data-lucide="smartphone" style="width:14px;"></i> Nagad (Personal)</div>
+          <div class="pay-val">01708761298 <button class="copy-sm-btn" data-copy="01708761298">Copy</button></div>
+        </div>
+        <div class="pay-card" style="grid-column: 1 / -1;">
+          <div class="pay-tag"><i data-lucide="building" style="width:14px;"></i> Trust Bank PLC (NPSB / Bank Transfer)</div>
+          <div style="font-size: 13px; margin-top: 6px; line-height: 1.6;">
+            <div>A/C No: <strong style="color:var(--ais-cyan); font-family:'JetBrains Mono', monospace;">00110466000494</strong> <button class="copy-sm-btn" data-copy="00110466000494">Copy</button></div>
+            <div>A/C Title: Rizum khan | Branch: Jalalabad Cantonment</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INVOICE GENERATOR FORM -->
+      <div class="invoice-form">
+        <h4 style="font-size: 15px; font-weight: 800; color: var(--ais-cyan); margin-bottom: 12px; border-bottom: 1px solid rgba(56,189,248,0.2); padding-bottom: 10px;">অটোমেটেড ইনভয়েস জেনারেটর</h4>
+        <p style="font-size: 12.5px; color: #94a3b8; margin-bottom: 16px;">পেমেন্ট সম্পন্ন করার পর নিচের তথ্য দিয়ে আপনার অফিসিয়াল ইনভয়েস তৈরি করুন এবং ইমেইলে সাবমিট করুন।</p>
+        
+        <div class="grid-2" style="margin: 0; gap: 14px;">
+          <div class="form-group"><label>আপনার নাম</label><input type="text" id="inv-name" placeholder="E.g. Tanvir Ahmed"></div>
+          <div class="form-group"><label>ইমেইল এড্রেস</label><input type="email" id="inv-email" placeholder="email@example.com"></div>
+        </div>
+        <div class="grid-2" style="margin: 0; gap: 14px;">
+          <div class="form-group"><label>ফোন নম্বর / হোয়াটসঅ্যাপ</label><input type="text" id="inv-phone" placeholder="01XXX-XXXXXX"></div>
+          <div class="form-group"><label>TrxID / Transaction ID</label><input type="text" id="inv-trx" placeholder="9XY6A2BC"></div>
+        </div>
+        <button class="btn-generate-invoice" id="btn-generate-inv"><i data-lucide="file-text" style="width:18px;"></i> ইনভয়েস জেনারেট ও মেইল সেন্ড করুন</button>
+      </div>
+
+      <div class="dispatch-actions" style="margin-top: 24px;">
+        <a href="https://wa.me/8801410761298" target="_blank" class="btn-dispatch btn-wa"><i data-lucide="message-circle" style="width:16px;"></i> WhatsApp সাপোর্ট</a>
+        <a href="https://www.facebook.com/share/1ZSuGprkLY/" target="_blank" class="btn-dispatch" style="background:#1877F2; color:#fff;"><i data-lucide="facebook" style="width:16px;"></i> Facebook পেজ</a>
+      </div>
+    </div>
+
+    <!-- INVOICE RENDER CONTAINER (Hidden until generated) -->
+    <div id="invoice-container">
+      <div class="inv-head">
+        <div>
+          <svg style="width: 50px; height: 50px; margin-bottom: 10px;" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="100" fill="#0B132B"/><text x="100" y="130" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="65" fill="#38BDF8" text-anchor="middle" letter-spacing="-3">AIS</text>
+          </svg>
+          <div style="font-weight: 800; font-size: 16px; color: var(--ais-navy);">Army IBA Specialist</div>
+          <div style="font-size: 12px; color: var(--text-muted);">Digital Publication Wing</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="inv-title">INVOICE</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: var(--primary);">#INV-<span id="render-inv-id"></span></div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Date: <span id="render-inv-date"></span></div>
+        </div>
+      </div>
+
+      <div class="inv-details">
+        <div>
+          <div style="font-size: 11.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-bottom: 6px;">Billed To:</div>
+          <div style="font-weight: 800; font-size: 15px;" id="render-inv-name">Name</div>
+          <div id="render-inv-email">Email</div>
+          <div id="render-inv-phone">Phone</div>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 11.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-bottom: 6px;">Payment Reference:</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-weight: 800;" id="render-inv-trx">TrxID</div>
+        </div>
+      </div>
+
+      <table class="inv-table">
+        <thead><tr><th>Description</th><th style="text-align:right;">Amount (BDT)</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Remote Income Blueprint (Master Edition v4.0)<br><span style="font-size:12px; color:var(--text-muted);">Includes NotebookLM Access & Resource Bundle</span></td>
+            <td style="text-align:right;">৳২৯৯.০০</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="inv-total">Total: ৳২৯৯.০০</div>
+
+      <div style="font-size: 11.5px; color: var(--text-muted); text-align: center; margin-top: 50px; border-top: 1px solid var(--border); padding-top: 14px;">
+        This is an electronically generated invoice and does not require a physical signature. All rights reserved by Army IBA Specialist.
+      </div>
+      
+      <div class="inv-actions no-print">
+        <button class="btn-action-outline" onclick="printIsolated('inv')" style="width:100%; justify-content:center;"><i data-lucide="printer" style="width:16px;"></i> ডাউনলোড / প্রিন্ট ইনভয়েস</button>
       </div>
     </div>
 
     <!-- FOOTER -->
-    <div class="footer">
-      <span>রিমোট ইনকাম ব্লুপ্রিন্ট © ২০২৬ — অল রাইটস রিজার্ভড বাই Army IBA Specialist (AIS)</span>
-      <span>ইন্টারঅ্যাক্টিভ ও ভেরিফায়েবল পিডিএফ ভিউয়ের জন্য প্রস্তুত</span>
+    <div class="footer no-print" style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 40px; display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+      <span>রিমোট ইনকাম ব্লুপ্রিন্ট © ২০২৬ — Army IBA Specialist (AIS)</span>
+      <span>ইন্টারঅ্যাক্টিভ ও ভেরিফায়েবল পিডিএফ ভিউ</span>
     </div>
 
   </div>
 </div>
 
+<!-- DOWNLOAD & RESOURCE MODAL -->
+<div class="modal-overlay" id="download-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span><i data-lucide="folder-down" style="width:18px; display:inline-block; vertical-align:-3px;"></i> রিসোর্স ও ডাউনলোড হাব</span>
+      <button id="btn-close-modal" style="background:none; border:none; color:#fff; cursor:pointer;"><i data-lucide="x" style="width:22px;"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="guide-box">
+        <strong style="color: #166534; display: block; font-size:14.5px; margin-bottom: 6px;">১. সম্পূর্ণ ফিল্ড ম্যানুয়াল অফলাইন PDF সেভ করুন</strong>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom:12px;">নিচের বাটনে ক্লিক করলে প্রিন্ট ডায়ালগ ওপেন হবে। <strong>Destination: Save as PDF</strong> সিলেক্ট করে বইটি সেভ করে নিন।</p>
+        <button onclick="window.print()" style="background:#0284c7; color:#fff; border:none; padding:10px 18px; border-radius:6px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:8px; font-size:13px;"><i data-lucide="printer" style="width:16px;"></i> সম্পূর্ণ বই PDF আকারে সেভ করুন</button>
+      </div>
+
+      <div style="background:#f8fafc; border:1px solid var(--border); padding:16px; border-radius:8px; margin-bottom:16px;">
+        <strong style="color: var(--primary-dark); display: block; font-size:14.5px; margin-bottom: 6px;">২. NotebookLM ক্লাসরুম ব্যবহার নির্দেশিকা</strong>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">আমাদের স্পেসে ঢুকে ডানদিকের <strong>"Audio Overview"</strong> বাটন প্লে করলে সম্পূর্ণ বইটির অডিও সামারি পডকাস্ট শুনতে পাবেন এবং নিচের চ্যাটবক্সে যেকোনো প্রশ্ন করতে পারবেন।</p>
+        <a href="https://gemini.google.com/notebook/6fe4bc5f-6653-49f0-932d-d95830e723fc" target="_blank" style="background:linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color:#fff; text-decoration:none; padding:10px 18px; border-radius:6px; font-weight:700; font-size:13px; display:inline-flex; align-items:center; gap:8px;"><i data-lucide="external-link" style="width:16px;"></i> ক্লাসরুমে প্রবেশ করুন</a>
+      </div>
+
+      <div style="background:#fffbeb; border:1px solid #fde68a; padding:16px; border-radius:8px;">
+        <strong style="color: #b45309; display: block; font-size:14.5px; margin-bottom: 6px;">৩. সহায়তা ডেস্ক</strong>
+        <p style="font-size: 13px; color: var(--text-muted);">আপনার যেকোনো জিজ্ঞাসা বা ট্রানজেকশন আইডির জন্য সরাসরি AIS হোয়াটসঅ্যাপে মেসেজ দিন: <a href="https://wa.me/8801410761298" target="_blank" style="color:var(--primary-dark); font-weight:700;">+880 1410-761298</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    if (window.lucide) {
-      window.lucide.createIcons();
-    }
+    if (window.lucide) { window.lucide.createIcons(); }
 
-    // State for Decision Engine
+    // --- Modal Logic ---
+    const modal = document.getElementById('download-modal');
+    document.getElementById('btn-open-modal').addEventListener('click', () => modal.style.display = 'flex');
+    document.getElementById('btn-close-modal').addEventListener('click', () => modal.style.display = 'none');
+    window.addEventListener('click', (e) => { if(e.target === modal) modal.style.display = 'none'; });
+
+    // --- Decision Simulator ---
     const state = { time: null, eng: null, pref: null };
-    const quizButtons = document.querySelectorAll('.quiz-opt');
+    const quizButtons = document.querySelectorAll('.sim-opt');
     const resPanel = document.getElementById('engine-result');
-    const resTitle = document.getElementById('res-title');
-    const resBadge = document.getElementById('res-badge');
-    const resDesc = document.getElementById('res-desc');
-    const resEarning = document.getElementById('res-earning');
-    const resTime = document.getElementById('res-time');
-    const resPlatform = document.getElementById('res-platform');
 
-    quizButtons.forEach(function (btn) {
-      btn.addEventListener('click', function () {
+    quizButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
         const cat = btn.getAttribute('data-cat');
-        const val = btn.getAttribute('data-val');
-        state[cat] = val;
-
-        const siblings = btn.parentElement.querySelectorAll('.quiz-opt');
-        siblings.forEach(function (s) { s.classList.remove('active'); });
+        state[cat] = btn.getAttribute('data-val');
+        btn.parentElement.querySelectorAll('.sim-opt').forEach(s => s.classList.remove('active'));
         btn.classList.add('active');
 
         if (state.time && state.eng && state.pref) {
           resPanel.style.display = 'block';
-
           if (state.eng === 'low' || state.pref === 'visual') {
-            resTitle.textContent = "শর্ট-ফর্ম ভিডিও এডিটিং (Shorts/Reels)";
-            resBadge.textContent = "লো-ইংলিশে ১০০% কার্যকর";
-            resDesc.textContent = "আপনার জন্য সেরা পছন্দ CapCut মোবাইল দিয়ে ইউটিউব/টিকটক রিলস এডিটিং। কোনো স্পোকেন ইংলিশ ছাড়া এআই সাবটাইটেল ও ০.৩ সেকেন্ডের কাটিং দিয়ে আমেরিকান ক্লায়েন্টকে মুগ্ধ করা যায়।";
-            resEarning.textContent = "$২০০ – $৪৫০/মাস";
-            resTime.textContent = "৫ – ৭ দিন";
-            resPlatform.textContent = "X (Twitter) & YouTube Inboxes";
+            document.getElementById('res-title').textContent = "শর্ট-ফর্ম ভিডিও এডিটিং (Shorts)";
+            document.getElementById('res-desc').textContent = "কোনো স্পোকেন ইংলিশ ছাড়া এআই সাবটাইটেল ও ০.৩ সেকেন্ডের কাটিং দিয়ে আমেরিকান ক্লায়েন্টকে মুগ্ধ করা যায়।";
+            document.getElementById('res-earning').textContent = "$২০০ – $৪৫০/মাস";
+            document.getElementById('res-time').textContent = "৫ – ৭ দিন";
+            document.getElementById('res-platform').textContent = "X (Twitter) & YouTube";
           } else if (state.pref === 'data' || (state.time === 'part' && state.eng === 'mid')) {
-            resTitle.textContent = "B2B লিড জেনারেশন ও ডাটা রিসার্চ";
-            resBadge.textContent = "চাকরিজীবীদের জন্য পারফেক্ট";
-            resDesc.textContent = "অফিস শেষে রাতে মাত্র ১ ঘণ্টা ফোন দিয়ে লিঙ্কডইন ও গুগলে সার্চ করে কোম্পানির সিইওদের ভেরিফায়েড ইমেইল গুগল শিটে তুলবেন। সম্পূর্ণ ম্যাথমেটিক্যাল কাজ।";
-            resEarning.textContent = "$১৫০ – $৩৫০/মাস";
-            resTime.textContent = "৩ – ৫ দিন";
-            resPlatform.textContent = "LinkedIn & Direct Email";
+            document.getElementById('res-title').textContent = "B2B লিড জেনারেশন ও ডাটা রিসার্চ";
+            document.getElementById('res-desc').textContent = "অফিস শেষে রাতে মাত্র ১ ঘণ্টা ফোন দিয়ে লিঙ্কডইন ও গুগলে সার্চ করে কোম্পানির সিইওদের ভেরিফায়েড ইমেইল গুগল শিটে তুলবেন।";
+            document.getElementById('res-earning').textContent = "$১৫০ – $৩৫০/মাস";
+            document.getElementById('res-time').textContent = "৩ – ৫ দিন";
+            document.getElementById('res-platform').textContent = "LinkedIn & Direct Email";
           } else {
-            resTitle.textContent = "এক্সিকিউটিভ রিমোট অপারেশনস ও লিঙ্কডইন অ্যাসিস্ট্যান্ট";
-            resBadge.textContent = "হাই-টিকেট মান্থলি রিটেইনার";
-            resDesc.textContent = "যেহেতু আপনার টেক্সট কমিউনিকেশন ভালো, পশ্চিমা ফাউন্ডারদের ইমেইল ইনবক্স ম্যানেজ বা এআই দিয়ে তাদের লিঙ্কডইন পোস্ট শিডিউল করার মাসিক অ্যাসিস্ট্যান্ট হিসেবে কাজ করতে পারবেন।";
-            resEarning.textContent = "$৩০০ – $৬০০/মাস";
-            resTime.textContent = "৭ – ১০ দিন";
-            resPlatform.textContent = "LinkedIn InMail & Slack Direct";
+            document.getElementById('res-title').textContent = "এক্সিকিউটিভ রিমোট অপারেশনস";
+            document.getElementById('res-desc').textContent = "পশ্চিমা ফাউন্ডারদের ইমেইল ইনবক্স ম্যানেজ বা এআই দিয়ে লিঙ্কডইন পোস্ট শিডিউল করার মাসিক অ্যাসিস্ট্যান্ট কাজ।";
+            document.getElementById('res-earning').textContent = "$৩০০ – $৬০০/মাস";
+            document.getElementById('res-time').textContent = "৭ – ১০ দিন";
+            document.getElementById('res-platform').textContent = "LinkedIn & Slack";
           }
         }
       });
     });
 
-    // Copy to clipboard handlers
-    const copyBtns = document.querySelectorAll('[data-copy]');
-    copyBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
+    // --- Copy Buttons ---
+    document.querySelectorAll('[data-copy]').forEach(btn => {
+      btn.addEventListener('click', () => {
         const text = btn.getAttribute('data-copy');
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text).then(function () {
-            showCopied(btn);
-          }).catch(function () {
-            fallbackCopy(text, btn);
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text).then(() => {
+            const orig = btn.innerHTML; btn.innerHTML = 'Copied!'; setTimeout(() => btn.innerHTML = orig, 1500);
           });
-        } else {
-          fallbackCopy(text, btn);
         }
       });
     });
 
-    function showCopied(btn) {
-      const orig = btn.innerHTML;
-      btn.innerHTML = 'Copied!';
-      setTimeout(function () { btn.innerHTML = orig; }, 1500);
-    }
+    // --- Exam & Certificate Engine ---
+    const qOpts = document.querySelectorAll('.q-opt');
+    const examAnswers = {};
+    qOpts.forEach(opt => {
+      opt.addEventListener('click', () => {
+        const qNum = opt.getAttribute('data-q');
+        opt.parentElement.querySelectorAll('.q-opt').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        examAnswers[qNum] = opt.getAttribute('data-val') === 'true';
+      });
+    });
 
-    function fallbackCopy(text, btn) {
-      const input = document.createElement('textarea');
-      input.value = text;
-      document.body.appendChild(input);
-      input.select();
-      document.execCommand('copy');
-      document.body.removeChild(input);
-      showCopied(btn);
-    }
+    document.getElementById('btn-submit-exam').addEventListener('click', () => {
+      if(Object.keys(examAnswers).length < 5) {
+        document.getElementById('exam-feedback').innerHTML = "<span style='color:var(--danger);'>সবগুলো প্রশ্নের উত্তর দিন।</span>";
+        return;
+      }
+      let correct = 0;
+      for(let key in examAnswers) { if(examAnswers[key]) correct++; }
+      const pct = (correct / 5) * 100;
+      
+      if(pct >= 80) {
+        document.getElementById('exam-feedback').innerHTML = "<span style='color:var(--accent-dark);'>অভিনন্দন! আপনি পাস করেছেন। সার্টিফিকেট জেনারেট হচ্ছে...</span>";
+        const name = prompt("সার্টিফিকেটে প্রিন্ট করার জন্য আপনার পূর্ণ নাম (ইংরেজিতে) লিখুন:", "Tanvir Ahmed") || "Professional Scholar";
+        
+        document.getElementById('cert-dynamic-name').textContent = name;
+        document.getElementById('cert-dynamic-id').textContent = "AIS-RIB-2026-" + Math.floor(1000 + Math.random() * 9000);
+        
+        const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        document.getElementById('cert-dynamic-date').textContent = date;
+        
+        const certContainer = document.getElementById('certificate-container');
+        certContainer.style.display = 'block';
+        setTimeout(() => certContainer.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+      } else {
+        document.getElementById('exam-feedback').innerHTML = `<span style='color:var(--danger);'>আপনার স্কোর: ${pct}%। পাস করতে ৮০% প্রয়োজন। আবার চেষ্টা করুন।</span>`;
+      }
+    });
+
+    // --- Automated Invoice Generator ---
+    document.getElementById('btn-generate-inv').addEventListener('click', () => {
+      const name = document.getElementById('inv-name').value || 'N/A';
+      const email = document.getElementById('inv-email').value || 'N/A';
+      const phone = document.getElementById('inv-phone').value || 'N/A';
+      const trx = document.getElementById('inv-trx').value || 'N/A';
+
+      if(name === 'N/A' || trx === 'N/A' || name === '' || trx === '') { 
+        alert('অনুগ্রহ করে নাম এবং TrxID পূরণ করুন।'); 
+        return; 
+      }
+
+      // Populate Invoice UI
+      const invId = Math.floor(100000 + Math.random() * 900000);
+      document.getElementById('render-inv-id').textContent = invId;
+      document.getElementById('render-inv-date').textContent = new Date().toLocaleDateString();
+      document.getElementById('render-inv-name').textContent = name;
+      document.getElementById('render-inv-email').textContent = email;
+      document.getElementById('render-inv-phone').textContent = phone;
+      document.getElementById('render-inv-trx').textContent = trx;
+
+      // Show Invoice
+      const invContainer = document.getElementById('invoice-container');
+      invContainer.style.display = 'block';
+      setTimeout(() => invContainer.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+
+      // Generate Automated Mailto Link to "Save to Email"
+      const subject = encodeURIComponent(`Invoice & Payment Info: ${name} (TrxID: ${trx})`);
+      const body = encodeURIComponent(`Hello AIS Team,\n\nHere are my payment details for the Remote Income Blueprint:\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nTransaction ID: ${trx}\nInvoice No: INV-${invId}\n\nPlease verify and send the access.\n\nThank you.`);
+      window.location.href = `mailto:armyibaspecialist@gmail.com?subject=${subject}&body=${body}`;
+    });
   });
+
+  // Isolated Print Functionality
+  function printIsolated(mode) {
+    if(mode === 'cert') document.body.classList.add('print-cert');
+    if(mode === 'inv') document.body.classList.add('print-inv');
+    
+    window.print();
+    
+    setTimeout(() => {
+      document.body.classList.remove('print-cert');
+      document.body.classList.remove('print-inv');
+    }, 500);
+  }
 </script>
 
 </body>
